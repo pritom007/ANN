@@ -20,6 +20,9 @@ class Network(object):
         :param: x: input of ANN
         :return: the output of ANN with input x, a 1-D array
         """
+        res = np.array(x)
+        res = res.reshape(1, len(res)).T
+        return res
 
     def training(self, trainData, T, n, alpha):
         """
