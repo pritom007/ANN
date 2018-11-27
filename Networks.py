@@ -20,9 +20,9 @@ class Network(object):
         :param: x: input of ANN
         :return: the output of ANN with input x, a 1-D array
         """
-        res = np.array(x)
-        res = res.reshape(1, len(res)).T
-        return res
+        input = np.array(x)
+        output = self.sigmoid(np.dot(input, self.weights))
+        return output
 
     def training(self, trainData, T, n, alpha):
         """
@@ -67,8 +67,8 @@ class Network(object):
         correct, wrong = 0, 0
         for i in range(len(data)):
             res = self.inference(data[0])
-            res_max = res.argmax()
-            if res_max == data.labels[i]:  # check the data inputs var
+            res_max = np.argmax(res)
+            if res_max == data[1]:  # check the data inputs var
                 correct += 1
             else:
                 wrong += 1
@@ -82,7 +82,7 @@ def dSquaredLoss(a, y):
     :param y: the corresponding correct label
     :return: the vector of partial derivatives of the squared loss with respect to the output activations
     """
-
+    return 2 * (a-y)
 
 def sigmoid(z):
     """The sigmoid function"""
