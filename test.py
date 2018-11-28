@@ -19,10 +19,10 @@ y = np.array([[1], [1], [1], [1], [0]])
 # seed good for debugging
 
 np.random.seed(1)
-
+bayes = np.random.random()
 # synapses
 
-syn0 = 2*np.random.random((3, 4)) - 1
+syn0 = 2*np.random.random((4, 4)) - 1
 syn1 = 2*np.random.random((4, 1)) - 1
 
 # training

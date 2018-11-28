@@ -15,6 +15,24 @@ class Network(object):
         self.weights = [np.random.randn(y, x)
                         for x, y in zip(sizes[:-1], sizes[1:])]
 
+        # The first element of sizes is the input layer.
+        # The last element of the sizes is the output layer
+        # Other than input and output layer, rest is hidden layer
+        self.ni = sizes[0] # 1 for bayes
+        self.nh = sizes[1]
+        self.no = sizes[2]
+        self.input_layer = [1.0] * self.ni +1
+        self.output_layer = [1.0] * self.no
+        self.hidden_layers = [1.0] * self.nh
+        print(self.input_layer, self.hidden_layers)
+        # dynamic case
+        # self.output_layer = np.asarray(sizes[self.num_layers - 1])
+        # self.hidden_layers =[range(self.num_layers-2)]
+
+        # for h in self.hidden_layers:
+        #    self.hidden_layers[h] = np.asarray()
+
+
     def inference(self, x):
         """
         :param: x: input of ANN
@@ -74,6 +92,12 @@ class Network(object):
                 wrong += 1
         return correct, wrong
 
+    def activation(self, weights, inputs):
+        activation = weights[-1]
+        for i in range(len(weights) - 1):
+            activation += weights[i] * inputs[i]
+        return activation
+
 
 # activation functions together with their derivative functions:
 def dSquaredLoss(a, y):
@@ -92,3 +116,4 @@ def sigmoid(z):
 def sigmoid_prime(z):
     """Derivative of the sigmoid function"""
     return sigmoid(z) * (1 - sigmoid(z))
+nn = Network([4,4,1])
