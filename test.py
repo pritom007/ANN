@@ -1,53 +1,22 @@
-import numpy as np
+import database_loader
+import Networks
+import matplotlib.pyplot as plt
+# read data:
 
 
-# Sigmod function
-# Keeps the data value between 0 to 1
-def sigmoid(x, deriv= False):
-    if (deriv == True):
-        return (x*(1-x))
-    return 1/(1+np.exp(-x))
-
-x = np.array([[0,0,1],
-             [0,1,1],
-             [1,0,1],
-             [1,1,1],
-             [0,0,0]])
-
-y = np.array([[1], [1], [1], [1], [0]])
-
-# seed good for debugging
-
-np.random.seed(1)
-bayes = np.random.random()
-# synapses
-
-syn0 = 2*np.random.random((4, 4)) - 1
-syn1 = 2*np.random.random((4, 1)) - 1
-
-# training
-for j in range(60000):
-    #layers
-    l0 = x
-    l1 = sigmoid(np.dot(l0, syn0))
-    l2 = sigmoid(np.dot(l1, syn1))
-
-    # backward propagation
-    l2_error = y -l2 # arbitrary at first
-
-    if(j % 10000) == 0:
-        print("Error: ", str(np.mean(np.abs(l2_error))))
-
-    l2_delta = l2_error * sigmoid(l2, deriv=True)
-
-    l1_error = l2_delta.dot(syn1.T)
-
-    l1_delta = l1_error * sigmoid(l1, deriv=True)
-
-    # update synapses/ weights
-    syn1 += l1.T.dot(l2_delta)
-    syn0 += l0.T.dot(l1_delta)
-print("Output after training ")
-print(l2)
-
-
+# mini-batch size:
+mini_batch_size = 10
+new_nn = Networks.Network([784, 30, 10])
+x_axis=[]
+y_axis=[]
+for x in range(1, 30):
+    training_data, validation_data, test_data = database_loader.load_data()
+    new_nn.training(training_data, x, mini_batch_size, .5)
+    correct, wrong = new_nn.evaluate(test_data)
+    print(correct, wrong)
+    total = (correct *100) /(correct + wrong)
+    x_axis.append(x)
+    y_axis.append(total)
+    print("--------------")
+plt.plot(x_axis,y_axis, 'ro')
+plt.show()
